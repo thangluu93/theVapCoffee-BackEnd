@@ -1,39 +1,43 @@
-// const app = require('express')();
-// const http = require('http').createServer(app);
-// const io = require('socket.io')(http);
+const app = require('express')();
+const http = require('http').createServer(app);
+const server = new (require('./index').creatNewServer)()
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
-// const cors = require('cors')
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
-// app.use(cors())
+// //firebase admin
+// const admin = require("firebase-admin");
+// const serviceAccount = require("./serviceAccountKey.json");
 
-// let queue;
-// const port = 3000;
-// // app.use((req, res, next) => {
-// //     res.header('Access-Control-Allow-Origin', '*');
-// //     next();
-// //   });
-
-// // app.use(cors());
-
-// app.post('/checkout', (req, res) => {
-//     // const data={
-//     //     'id':1,
-//     //     'name':"cf sua"
-//     // }
-//     // let id=req.body.id;
-//     console.log(req.body);
-//     queue = req.body;
-//     res.send(queue);
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     databaseURL: "https://the-vap-coffee.firebaseio.com"
 // });
-
-// io.on('connection', (req, res) => {
-//     res.send('hello');
-// });
-
-// app.get('/', (req, res) => res.send('Hello world!!!'));
+// const db = admin.firestore();
 
 
-// app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+const cors = require('cors');
+app.use(cors());
+
+
+
+app.get('/', (req, res) => {
+    res.send('Hello World')
+});
+
+app.post('/checkout', (req, res) => {
+    server.writeData(req.body);
+})
+
+app.get('/makeline', (req, res) => {
+    res.send('hello');
+})
+
+// app.post('/makeline', setSocket, (req, res) => {
+//     console.log(req.socket);
+// })
+
+http.listen(3000, () => {
+    console.log(`Listening in 3000 `);
+})
 

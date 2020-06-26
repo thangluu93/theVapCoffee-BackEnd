@@ -1,51 +1,41 @@
 const app = require('express')();
 const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
-const cors = require('cors');
+//firebase admin
+//firebase admin
+const admin = require("firebase-admin");
+const serviceAccount = require("./serviceAccountKey.json");
 
-app.use(cors());
-
-const port = 3000;
-
-let queue;
-
-
-app.get('/', (req, res) => {
-    res.send('Hello World')
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://the-vap-coffee.firebaseio.com"
 });
+const db = admin.firestore();
 
-function setSocket(req, res, next) {
-    io.on("connection", function (socket) {
-        req.socket = socket;
-        console.log("RUN");
-        next();
-    });
+
+const documentRef = db.collection('orders');
+const Server = function () {
+    this.data = {}
 }
 
-app.post('/checkout', (req, res) => {
-    queue = req.body;
-    // console.log(queue);
-})
+Server.prototype.writeData = function (data) {
+    console.log(data);
+    documentRef.doc((new Date()).getTime().toString()).set(data);
+}
 
+function getData() {
+    let a = {
+        'id': 1,
+        'status': 'active'
+    }
+    return a;
+}
 
-// app.post('/makeline', setSocket, (req, res) => {
-//     setSocket();
-// io.broadcast.emit('order',()=>{
-//     queue
-// })
-// })
+module.exports = {
 
-http.listen(3000, () => {
-    console.log(`Listening in ${port} `);
-})
-
-io.on('connection', (socket) => {
-    console.log(socket.id);
-    socket.broadcast.emit('order', () => {
-        queue
-    })
-})
+    creatNewServer: Server
+}

@@ -23,16 +23,8 @@ const Server = function () {
 }
 
 Server.prototype.sendOrder = function (data) {
-    console.log(data);
-    documentRef.doc((new Date()).getTime().toString()).set(data);
-}
-
-function getData() {
-    let a = {
-        'id': 1,
-        'status': 'active'
-    }
-    return a;
+    // console.log(data);
+    documentRef.doc(data.customer).set(data);
 }
 
 

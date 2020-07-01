@@ -26,6 +26,8 @@ app.get('/', (req, res) => {
 });
 
 app.post('/checkout', (req, res) => {
+    console.log(req.body);
+    
     server.sendOrder(req.body);
 })
 

@@ -22,7 +22,7 @@ const Server = function () {
     this.data = {}
 }
 
-Server.prototype.writeData = function (data) {
+Server.prototype.sendOrder = function (data) {
     console.log(data);
     documentRef.doc((new Date()).getTime().toString()).set(data);
 }

@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/checkout', (req, res) => {
-    server.writeData(req.body);
+    server.sendOrder(req.body);
 })
 
 app.get('/makeline', (req, res) => {
